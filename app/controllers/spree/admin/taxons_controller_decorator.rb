@@ -4,11 +4,11 @@ module Spree
       before_filter :load_taxon, :only => [:sort_products, :update_products]
 
       def sort_products
-        @products = @taxon.products.active
+        @products = @taxon.products.order('spree_products_taxons.position asc').active
       end
 
       def update_products
-        products = @taxon.products_taxons
+        products = @taxon.products_taxons.order('spree_products_taxons.position asc')
         product_ids_positions = params[:product_positions].split(",").map(&:to_i)
         product_ids_positions.each_with_index do |id, index|
           product = products.detect{|p| p.product_id == id }
